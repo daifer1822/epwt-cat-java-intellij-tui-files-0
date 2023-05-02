@@ -7,7 +7,7 @@ public class    App {
         //Creem l'array d'estudiants:
         Student students[] = init();
 
-            File file = new File("students.out");
+        File file = new File("students.out");
 
         String message = "Llista desordenada:";
 
