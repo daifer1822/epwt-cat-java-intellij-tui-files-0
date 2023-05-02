@@ -8,10 +8,10 @@ public class App {
     public static void main(String[] args) {
 
         //Creem l'array d'estudiants:
-        Student students[] = init();
+
         //TODO Heu de canviar la crida a init() per la crida a initTui()
         //Student [] students = ... //TODO
-
+        Student students[] = initTui();
         //Imprimeix tots els estudiants
         printStudents(students, "Llista desordenada:");
 
@@ -40,40 +40,65 @@ public class App {
         return sb.toString();
     }
 
-    static public Student[] initTui() {
+    public static Student[] initTui(){
 
         //Inicialment suposem que no tenim cap estudiant
-        Student students[] = new Student[0];
-
+        //Student students[] = new Student[0];
         //Ara, hem de preguntar quants estudiants volem tenir
         //Scanner in = ...
-
-        System.out.print("Number of students: ");
         //TODO
+        Scanner in = new Scanner(System.in);
 
-        //System.out.println("Number of students is: " + //TODO );
+        System.out.print("Cuanto alumnos son? ");
+        int Number = in.nextInt();
+        System.out.println("Tienes " + Number + " Alumnos");
 
-        //int numberOfStudents = stringToInt(numberOfStudentsStr);
-
-        //Si el número d'estudiants és més gran que 0
-        //preguntarem el nom, edat i subjects de cada estudiant
-        //if(numberOfStudents > 0) {
-
-//            students = new Student[numberOfStudents];
-//            Student newStudent;
-
-//            for(int i = 0; i < numberOfStudents; i++){
-
-              //TODO - Anar preguntant els valors (name, age,...) per a cada estudiant
-
-                //Fiquem l'estudiant a l'array
-                //students[i] = newStudent;
-            //}
-        //}
-        //in.close();
-        return students;
+        return getInputsBucle(Number);
     }
+    public static Student getInput(){
 
+        Scanner ln = new Scanner(System.in);
+
+        System.out.print("Como te llamas? ");
+        String name = ln.nextLine();
+        System.out.println("Tú nombre es " + name);
+
+        System.out.print("Quants anys tens? ");
+        int age = ln.nextInt();
+        System.out.println("Tens " + age + " anys");
+
+        System.out.print("Quants Subjects tens? ");
+        int amountOfEnrolledSubjects = ln.nextInt();
+
+        System.out.println("Tens " + amountOfEnrolledSubjects + " Subjects");
+
+        return addSudentData(name,age, amountOfEnrolledSubjects);
+    }
+    public static Student[] getInputsBucle(Integer _Amount){
+
+        Student students[] = new Student[_Amount];
+
+        for (int i = 0; i < _Amount; i++){
+            System.out.println("---- Student number "+ (i + 1) +" ----");
+            students[i] = getInput();
+
+        }
+
+        if (_Amount <= 0){
+            students = new Student[0];
+        }
+        return students;
+
+    }
+    public static Student addSudentData(String _name, int _age, int _asig){
+
+        Student s0 = new Student();
+        s0.name = _name;
+        s0.age = _age;
+        s0.amountOfEnrolledSubjects = _asig;
+
+        return s0;
+    }
 
 
     //Mètode que genera un array d'estudiants

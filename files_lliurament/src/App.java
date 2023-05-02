@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 public class    App {
 
@@ -6,7 +7,7 @@ public class    App {
         //Creem l'array d'estudiants:
         Student students[] = init();
 
-        File file = new File("students.out");
+            File file = new File("students.out");
 
         String message = "Llista desordenada:";
 
@@ -15,26 +16,95 @@ public class    App {
         printStudents(students, message);
 
         //TODO Guardar la llista d'estudiants al fitxer students.out
+        saveToFile(students,"!Agregando a un fichero!",file,false);
+
+
         //TODO Torna a imprimir la llista d'estudiants
         //però ara llegint-la del fitxer students.out
-
+        //uso un funcion para pasar de texto a objetos y luego imprimirlos
+        printStudents(converStudent(file), message);
     }
 
     static String readFromFile(File file) throws IOException{
         //TODO Implementar usant FileReader
+        //Creamos un file reader para leer "file"
+        FileReader fw = new FileReader(file);
+        int c  = fw.read();
+        //guarda los caracteres en un string
+        String contents = "";
+        //while para recorrer el archivo y recuperar los caracteres del string
+        while(c != -1) {
+            //Cal fer cast de int a char i concatenem pera formar un String al final
+            contents += (char)c;
+            c = fw.read(); //llegim el siguiente caràcter
+
+        }
+        fw.close();
         //No podeu usar BufferedReader
+        return contents;
     }
 
     static void saveToFile(Student[] students, String message,
                            File file, boolean append)
             throws IOException {
         //TODO Implementar usant FileWriter
+        System.out.println(message);
+        //Creamos un FileWriter para escribir en el archivo
+        //El booleano como segundo parámetro significa:
+        //true: lo que escribimos se añadirá a los contenidos ya existentes
+        //false: lo que escribimos sustituirá a los contenidos ya existentes
+        //Crea un enlace a un archivo para modificarlo
+        FileWriter fw = new FileWriter(file, append);
+        //Convierto una lista en un string para luego agregarla al archivo
+        //agrega el contenido al archivo
+
+        for (int i = 0; i < students.length; i += 1 ){
+
+            fw.write(String.valueOf(students[i] + "\n"));
+
+        }
+
+        //cierra el archivo, para terminar las modificaciones
+        fw.close();
         //No podeu usar BufferedWriter
     }
 
     //Mètode que imprimeix la llista d'estudiants
     //Delega la creació de l'String al mètode
     //buildStudentListString
+
+    static Student[] converStudent(File file) throws IOException {
+
+        //guarda el string con los datos
+        String data = readFromFile(file);
+        //elimino esto del string "[]" para hacer un split
+        data = data.substring(1, data.length() - 1);
+        //Creo un array de strings plara un split
+        String[] lines = data.split("\n");
+        //Creo un array de students para guardar los estudiantes
+        Student[] tempStudent = new Student[lines.length];
+
+        //bucle para conseguir cada linea con los valores de los estudiantes
+        for (int i = 0; i < lines.length ; i += 1 ){
+            //guarda la linea en la que esta
+            String[] parts = lines[i].split("\\s+");
+            //crea un studiante para añadir sus valores
+            Student s0 = new Student();
+            //añade el nombre
+            s0.name = parts[1];
+            //añade la edad
+            s0.age = Integer.parseInt(parts[3]);
+            //añade las materias
+            s0.amountOfEnrolledSubjects = Integer.parseInt(parts[5]);
+            //lo añade a la array de estudiantes
+            tempStudent[i] = s0;
+
+        }
+
+        //lo añade a la array de estudiantes
+        return tempStudent;
+    }
+
     static void printStudents(Student [] students,
                               String message){
         System.out.println(buildListString(students, message));
